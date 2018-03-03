@@ -81,7 +81,7 @@ def main():
         sys.exit(1)
     elif len(sys.argv) == 2:
         os.environ['DJANGO_SETTINGS_MODULE'] = sys.argv[1]
-    else:
+    elif len(sys.argv) > 2:
         print('Too many arguments!')
         sys.exit(1)
 
