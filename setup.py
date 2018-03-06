@@ -1,23 +1,27 @@
-
-
-
 from setuptools import setup, find_packages
+
+try:
+    import pypandoc
+    description = pypandoc.convert('README.md', 'rst')
+except (IOError, ImportError):
+    description = open('README.md').read()
+
 
 
 setup(
     name='pginit',
-    version='0.1',
+    version='0.3',
     description='initialize postgres for django project',
-    long_description='pginit path.to.settings',
+    long_description=description,
     author='Roman Evstifeev',
     author_email='someuniquename@gmail.com',
     url='https://github.com/Fak3/pginit',
     license='MIT',
     #packages=find_packages(),
-    py_modules=['postgres_init'],
+    py_modules=['pginit'],
     include_package_data=True,
     entry_points={
-        'console_scripts': ['pginit = postgres_init:main'],
+        'console_scripts': ['pginit = pginit:main'],
     },
     classifiers = [
         'Development Status :: 4 - Beta',
