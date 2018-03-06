@@ -52,6 +52,8 @@ def postgres_init(connection, user, password, database):
             print(str(e).strip())
         else:
             raise
+    else:
+        print(f"create user {user} ok")
 
 
     # Also create user's own database to be able to login with psql
@@ -62,6 +64,8 @@ def postgres_init(connection, user, password, database):
             print(str(e).strip())
         else:
             raise
+    else:
+        print(f"create database {user} ok")
 
     print(f"Trying to create database '{database}' ...")
     try:
@@ -71,6 +75,8 @@ def postgres_init(connection, user, password, database):
             print(str(e).strip())
         else:
             raise
+    else:
+        print(f"create database {database} ok")
 
 
 def main():
