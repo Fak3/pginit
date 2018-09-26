@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os, sys
+import os, sys, re
 from textwrap import dedent
 
 import psycopg2
@@ -14,15 +14,13 @@ def postgres_connect(db_config, **kwargs):
     return conn
 
 
-def postgres_connect_superuser(db_config):
-    superuser = input('Please enter postgres superuser name [default: postgres]:')
-    superuser = superuser.strip() or 'postgres'
+def postgres_connect_superuser(db_config, username, dbname):
     try:
-        conn = postgres_connect(db_config, USER=superuser, PASSWORD='', NAME='postgres')
+        conn = postgres_connect(db_config, NAME=dbname, USER=username, PASSWORD='')
     except Exception as e:
         if re.search('role ".*" does not exist', str(e)):
-            print(str(e))
-        elif 'password' in str(e):
+            raise
+        elif 'password' in str(e) or 'authentication failed for user' in str(e):
             message = dedent('''\n
                 Failed to connect as '%s' using empty password.
                 To fix this, please consider setting 'trust' policy for local users in pg_hba.conf,
@@ -42,7 +40,7 @@ def postgres_connect_superuser(db_config):
 
 
 def postgres_init(connection, user, password, database):
-    print(f"Trying to create user '{user}' ...")
+    print(f"Trying to create user '{user}' with password '{password}' ...")
     cur = connection.cursor()
 
     try:
@@ -79,6 +77,7 @@ def postgres_init(connection, user, password, database):
         print(f"create database {database} ok")
 
 
+
 def main():
     sys.path.insert(0, os.getcwd())
 
@@ -93,10 +92,20 @@ def main():
 
     from django.conf import settings
 
+
+    superuser = input('Please enter postgres superuser name [default: postgres]:')
+    superuser = superuser.strip() or 'postgres'
+
     DB = settings.DATABASES['default']
-    conn = postgres_connect_superuser(DB)
+    conn = postgres_connect_superuser(DB, username=superuser, dbname='postgres')
 
     postgres_init(conn, DB['USER'], DB['PASSWORD'], DB['NAME'])
+
+    conn = postgres_connect_superuser(DB, username=superuser, dbname=DB['NAME'])
+    print(f"Trying to create extension hstore ...")
+    cur = conn.cursor()
+    cur.execute(f"CREATE EXTENSION IF NOT EXISTS hstore;")
+    print(f"create extension ok")
 
 
 if __name__ == '__main__':
