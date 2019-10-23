@@ -1,8 +1,10 @@
 #!/usr/bin/env python
+from __future__ import print_function
 import os, sys, re
 from textwrap import dedent
 
 import psycopg2
+import six
 
 
 def postgres_connect(db_config, **kwargs):
@@ -32,7 +34,7 @@ def postgres_connect_superuser(db_config, username, dbname):
                 host    all             all             127.0.0.1/32            trust
                 host    all             all             ::1/128                 trust
             ''' % username)
-            raise Exception(message) from e
+            six.raise_from(Exception(message), e)
         else:
             raise
 

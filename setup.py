@@ -19,6 +19,7 @@ setup(
     license='MIT',
     #packages=find_packages(),
     py_modules=['pginit'],
+    install_requires=['six'],
     include_package_data=True,
     entry_points={
         'console_scripts': ['pginit = pginit:main'],
