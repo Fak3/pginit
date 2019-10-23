@@ -48,7 +48,7 @@ def postgres_init(connection, user, password, database):
     try:
         cur.execute("create user {user} password '{password}' createdb;".format(**locals()))
     except Exception as e:
-        if 'role "{user}" already exists'.format(locals()) in str(e):
+        if 'role "{user}" already exists'.format(**locals()) in str(e):
             print(str(e).strip())
         else:
             raise
@@ -60,7 +60,7 @@ def postgres_init(connection, user, password, database):
     try:
         cur.execute("create database {user} owner = {user};".format(**locals()))
     except Exception as e:
-        if 'database "{user}" already exists'.format(locals()) in str(e):
+        if 'database "{user}" already exists'.format(**locals()) in str(e):
             print(str(e).strip())
         else:
             raise
@@ -71,7 +71,7 @@ def postgres_init(connection, user, password, database):
     try:
         cur.execute("create database {database} owner = {user};".format(**locals()))
     except Exception as e:
-        if 'database "{database}" already exists'.format(locals()) in str(e):
+        if 'database "{database}" already exists'.format(**locals()) in str(e):
             print(str(e).strip())
         else:
             raise
