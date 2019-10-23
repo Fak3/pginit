@@ -42,41 +42,41 @@ def postgres_connect_superuser(db_config, username, dbname):
 
 
 def postgres_init(connection, user, password, database):
-    print(f"Trying to create user '{user}' with password '{password}' ...")
+    print("Trying to create user '{user}' with password '{password}' ...".format(locals()))
     cur = connection.cursor()
 
     try:
-        cur.execute(f"create user {user} password '{password}' createdb;")
+        cur.execute("create user {user} password '{password}' createdb;".format(locals()))
     except Exception as e:
-        if f'role "{user}" already exists' in str(e):
+        if 'role "{user}" already exists'.format(locals()) in str(e):
             print(str(e).strip())
         else:
             raise
     else:
-        print(f"create user {user} ok")
+        print("create user {user} ok".format(locals()))
 
 
     # Also create user's own database to be able to login with psql
     try:
-        cur.execute(f"create database {user} owner = {user};")
+        cur.execute("create database {user} owner = {user};".format(locals()))
     except Exception as e:
-        if f'database "{user}" already exists' in str(e):
+        if 'database "{user}" already exists'.format(locals()) in str(e):
             print(str(e).strip())
         else:
             raise
     else:
-        print(f"create database {user} ok")
+        print("create database {user} ok".format(locals()))
 
-    print(f"Trying to create database '{database}' ...")
+    print("Trying to create database '{database}' ...".format(locals()))
     try:
-        cur.execute(f"create database {database} owner = {user};")
+        cur.execute("create database {database} owner = {user};".format(locals()))
     except Exception as e:
-        if f'database "{database}" already exists' in str(e):
+        if 'database "{database}" already exists'.format(locals()) in str(e):
             print(str(e).strip())
         else:
             raise
     else:
-        print(f"create database {database} ok")
+        print("create database {database} ok".format(locals()))
 
 
 
@@ -104,10 +104,10 @@ def main():
     postgres_init(conn, DB['USER'], DB['PASSWORD'], DB['NAME'])
 
     conn = postgres_connect_superuser(DB, username=superuser, dbname=DB['NAME'])
-    print(f"Trying to create extension hstore ...")
+    print("Trying to create extension hstore ...")
     cur = conn.cursor()
-    cur.execute(f"CREATE EXTENSION IF NOT EXISTS hstore;")
-    print(f"create extension ok")
+    cur.execute("CREATE EXTENSION IF NOT EXISTS hstore;")
+    print("create extension ok")
 
 
 if __name__ == '__main__':

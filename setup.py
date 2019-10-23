@@ -10,7 +10,7 @@ except (IOError, ImportError):
 
 setup(
     name='pginit',
-    version='0.4',
+    version='0.6',
     description='initialize postgres for django project',
     long_description=description,
     author='Roman Evstifeev',
