@@ -48,7 +48,7 @@ def postgres_init(connection, user, password, database):
 
     try:
         cur.execute("create user {user} password '{password}' createdb;".format(**locals()))
-    except DuplicateObject:
+    except DuplicateObject as e:
         print(str(e).strip())
     except Exception as e:
         if 'role "{user}" already exists'.format(**locals()) in str(e):
@@ -62,7 +62,7 @@ def postgres_init(connection, user, password, database):
     # Also create user's own database to be able to login with psql
     try:
         cur.execute("create database {user} owner = {user};".format(**locals()))
-    except DuplicateObject:
+    except DuplicateObject as e:
         print(str(e).strip())
     except Exception as e:
         if 'database "{user}" already exists'.format(**locals()) in str(e):
@@ -75,7 +75,7 @@ def postgres_init(connection, user, password, database):
     print("Trying to create database '{database}' ...".format(**locals()))
     try:
         cur.execute("create database {database} owner = {user};".format(**locals()))
-    except DuplicateObject:
+    except DuplicateObject as e:
         print(str(e).strip())
     except Exception as e:
         if 'database "{database}" already exists'.format(**locals()) in str(e):
