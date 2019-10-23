@@ -42,41 +42,41 @@ def postgres_connect_superuser(db_config, username, dbname):
 
 
 def postgres_init(connection, user, password, database):
-    print("Trying to create user '{user}' with password '{password}' ...".format(locals()))
+    print("Trying to create user '{user}' with password '{password}' ...".format(**locals()))
     cur = connection.cursor()
 
     try:
-        cur.execute("create user {user} password '{password}' createdb;".format(locals()))
+        cur.execute("create user {user} password '{password}' createdb;".format(**locals()))
     except Exception as e:
         if 'role "{user}" already exists'.format(locals()) in str(e):
             print(str(e).strip())
         else:
             raise
     else:
-        print("create user {user} ok".format(locals()))
+        print("create user {user} ok".format(**locals()))
 
 
     # Also create user's own database to be able to login with psql
     try:
-        cur.execute("create database {user} owner = {user};".format(locals()))
+        cur.execute("create database {user} owner = {user};".format(**locals()))
     except Exception as e:
         if 'database "{user}" already exists'.format(locals()) in str(e):
             print(str(e).strip())
         else:
             raise
     else:
-        print("create database {user} ok".format(locals()))
+        print("create database {user} ok".format(**locals()))
 
-    print("Trying to create database '{database}' ...".format(locals()))
+    print("Trying to create database '{database}' ...".format(**locals()))
     try:
-        cur.execute("create database {database} owner = {user};".format(locals()))
+        cur.execute("create database {database} owner = {user};".format(**locals()))
     except Exception as e:
         if 'database "{database}" already exists'.format(locals()) in str(e):
             print(str(e).strip())
         else:
             raise
     else:
-        print("create database {database} ok".format(locals()))
+        print("create database {database} ok".format(**locals()))
 
 
 
