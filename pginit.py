@@ -95,7 +95,7 @@ def main():
     from django.conf import settings
 
 
-    superuser = input('Please enter postgres superuser name [default: postgres]:')
+    superuser = six.moves.input('Please enter postgres superuser name [default: postgres]:')
     superuser = superuser.strip() or 'postgres'
 
     DB = settings.DATABASES['default']
