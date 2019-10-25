@@ -10,6 +10,7 @@ import six
 
 def postgres_connect(db_config, **kwargs):
     args = "user='%(USER)s' password='%(PASSWORD)s' dbname='%(NAME)s' host='%(HOST)s' port='%(PORT)s'"
+    print('Connecting with %(HOST)s:%(PORT)s/%(NAME)s' % dict(db_config, **kwargs))
     conn = psycopg2.connect(args % dict(db_config, **kwargs))
 
     # It is required to run CREATE DATABASE statement outside of transactions.
