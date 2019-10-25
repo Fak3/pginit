@@ -4,7 +4,10 @@ import os, sys, re
 from textwrap import dedent
 
 import psycopg2
-from psycopg2.errors import DuplicateObject, DuplicateDatabase
+try:
+    from psycopg2.errors import DuplicateObject, DuplicateDatabase
+except ImportError:
+    from psycopg2 import DuplicateObject, DuplicateDatabase
 import six
 
 
